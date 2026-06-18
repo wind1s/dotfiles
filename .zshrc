@@ -55,6 +55,40 @@ export PATH=$PATH:/usr/local/cuda/bin
 # Increase cursor speed
 xset r rate 300 30
 
+# Initialize zsh autocomplete
+autoload -Uz compinit
+compinit
+autoload -U colors
+
+# If a completion is performed with the cursor within a word, and a full completion is inserted, the cursor is moved to the end of the word.
+setopt always_to_end
+
+# Change dir without typing cd, just type the dir
+setopt auto_cd
+
+# Hitting tab now instead gives the first match instead of choosing with another tab. Hitting more tab cycles thorugh the list.
+setopt menu_complete
+
+# Fewer distractions. 
+# Beep disables error bell sound. 
+# nomatch turns off error from matching (e.g. ls *.txt) to instead use the literal string. 
+# notify prevents from interrupting mid command and waits until next prompt to notify.
+unsetopt beep nomatch notify
+
+# History settings
+HISTSIZE=100000
+SAVEHIST=100000
+# Handle commands in history
+setopt hist_expire_dups_first
+setopt hist_find_no_dups
+setopt hist_reduce_blanks
+
+# Share history accross terminals
+setopt share_history
+
+# Append to history instead of overwriting
+setopt append_history
+
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
 
@@ -75,7 +109,7 @@ alias ga="git add"
 alias cl="clear"
 alias l='ls -laF --color'
 alias lh='ls -lahF --color'
-alias ls='ls -aF --color'
+alias ls='ls -F --color'
 alias s='sudo'
 #Add extra protection against mistakes
 alias rm='rm -I'
