@@ -55,9 +55,8 @@ export PATH=$PATH:/usr/local/cuda/bin
 # Increase cursor speed
 xset r rate 300 30
 
-# Custom aliases
-alias cl="clear"
-alias docker-slim="docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/slim:latest"
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
 
 # Apt aliases
 alias apt="apt-fast"
@@ -71,6 +70,20 @@ alias gs="git status --short"
 alias gd="git diff --output-indicator-new=' ' --output-indicator-old=' '"
 alias gds="git diff --staged --output-indicator-new=' ' --output-indicator-old=' '"
 alias ga="git add"
+
+# Custom aliases
+alias cl="clear"
+alias l='ls -laF --color'
+alias lh='ls -lahF --color'
+alias ls='ls -aF --color'
+alias s='sudo'
+#Add extra protection against mistakes
+alias rm='rm -I'
+alias untarz='tar -xvf'
+alias tarz='tar -cavf'
+alias docker-slim="docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock dslim/slim:latest"
+alias myip='curl https://icanhazip.com'
+alias strip-metadata='exiftool -r -All='
 
 # Git short-cuts.
 function gc() {
@@ -93,14 +106,36 @@ alias gb="git branch"
 alias gi="git init"
 alias gcl="git clone"
 
-alias l='ls -laF --color'
-alias lh='ls -lahF --color'
-alias ls='ls -aF --color'
-alias s='sudo'
-#Add extra protection against mistakes
-alias rm='rm -I'
-alias untarz='tar -xvf'
-alias tarz='tar -cavf'
-alias myip='curl https://icanhazip.com'
-alias stripmetadata='exiftool -r -All='
-alias upgrade-discord="sudo wget -O /tmp/discord.deb 'https://discord.com/api/download?platform=linux&format=deb' && sudo apt install -y /tmp/discord.deb && sudo rm /tmp/discord.deb"
+
+
+# Update functions
+update-discord() {
+    local f
+    f=$(mktemp --suffix=.deb) || { echo "Failed to create temporary file."; return 1; }
+
+    curl -sL -o "$f" 'https://discord.com/api/download?platform=linux&format=deb' && \
+    sudo apt install -y "$f" && echo "Updated Discord"
+    rm "$f" 
+}
+
+update-fzf() {
+    local d
+    d=$(mktemp -d) || { echo "Failed to create temporary directory."; return 1; }
+    cd "$d" || return 1
+
+    # Download both the binary and checksums file in a single pipeline
+    curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | \
+            jq -r '.assets[] | select((.name | endswith("checksums.txt")) or (.name | endswith("linux_amd64.tar.gz"))) | .browser_download_url' | \
+        xargs -n 1 curl -sLO
+
+    # Verify checksum and install
+    if grep "linux_amd64.tar.gz" *checksums.txt | sha256sum --check --status; then
+        sudo tar -xzf fzf-*-linux_amd64.tar.gz -C /usr/local/bin fzf && fzf --version
+        echo "Updated fzf"
+    else
+        echo "Checksum verification failed! Skipping update"
+    fi
+
+    # Cleanup
+    cd - > /dev/null && rm -rf "$d"
+}
