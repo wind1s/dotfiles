@@ -45,7 +45,7 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
 
-export FZF_DEFAULT_COMMAND="fdfind . $HOME"
+export FZF_DEFAULT_COMMAND="fdfind --type f"
 export JAVA_HOME=/usr/lib/jvm/jdk-25
 export PATH=$JAVA_HOME/bin:$PATH
 
