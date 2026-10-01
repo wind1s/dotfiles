@@ -1,6 +1,3 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -14,11 +11,8 @@ ZSH_THEME="custom"
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
+DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
@@ -41,9 +35,6 @@ plugins=(git gh git-auto-fetch docker docker-compose nmap)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
 
 export FZF_DEFAULT_COMMAND="fdfind --type f"
 export JAVA_HOME=/usr/lib/jvm/jdk-25
@@ -69,9 +60,9 @@ setopt auto_cd
 # Hitting tab now instead gives the first match instead of choosing with another tab. Hitting more tab cycles thorugh the list.
 setopt menu_complete
 
-# Fewer distractions. 
-# Beep disables error bell sound. 
-# nomatch turns off error from matching (e.g. ls *.txt) to instead use the literal string. 
+# Fewer distractions.
+# Beep disables error bell sound.
+# nomatch turns off error from matching (e.g. ls *.txt) to instead use the literal string.
 # notify prevents from interrupting mid command and waits until next prompt to notify.
 unsetopt beep nomatch notify
 
@@ -105,12 +96,17 @@ alias gd="git diff --output-indicator-new=' ' --output-indicator-old=' '"
 alias gds="git diff --staged --output-indicator-new=' ' --output-indicator-old=' '"
 alias ga="git add"
 
+# Ls aliases
+export EZA_COLORS="ur=32:uw=32:ux=32:ue=32:gr=33:gw=33:gx=33:tr=31:tw=31:tx=31:uu=38;5;253:gu=38;5;253:sn=38;5;253:sb=38;5;250:sk=38;5;45:sm=38;5;214:sg=38;5;202"
+alias ll='eza --color=always --color-scale=age --color-scale-mode=gradient -glF'
+alias la='eza --color=always --color-scale=age --color-scale-mode=gradient -glaF'
+alias ls='eza --color=always --color-scale=age --color-scale-mode=gradient -gF'
+alias l='eza --color=always --color-scale=age --color-scale-mode=gradient -gF'
+
 # Custom aliases
 alias cl="clear"
-alias l='ls -laF --color'
-alias lh='ls -lahF --color'
-alias ls='ls -F --color'
 alias s='sudo'
+
 #Add extra protection against mistakes
 alias rm='rm -I'
 alias untarz='tar -xvf'
@@ -141,7 +137,6 @@ alias gi="git init"
 alias gcl="git clone"
 
 
-
 # Update functions
 update-discord() {
     local f
@@ -149,7 +144,7 @@ update-discord() {
 
     curl -sL -o "$f" 'https://discord.com/api/download?platform=linux&format=deb' && \
     sudo apt install -y "$f" && echo "Updated Discord"
-    rm "$f" 
+    rm "$f"
 }
 
 update-fzf() {
