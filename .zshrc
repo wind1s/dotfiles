@@ -34,7 +34,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 export PATH=$PATH:$HOME/.local/bin
 
-export FZF_DEFAULT_COMMAND="fdfind --hidden -E .git -E .vscode -E .cargo"
+export FZF_DEFAULT_COMMAND="fdfind --type f"
 export JAVA_HOME=/usr/lib/jvm/java-25-openjdk-amd64
 export PATH=$PATH:$JAVA_HOME/bin
 
@@ -91,17 +91,16 @@ alias apt-install="sudo apt-fast install"
 alias apt-upgrade="sudo apt-fast update && sudo apt-fast upgrade"
 alias apt-clean="sudo apt-fast autoclean"
 
-# Git aliases
-alias gs="git status --short"
-alias gd="git diff --output-indicator-new=' ' --output-indicator-old=' '"
-alias gds="git diff --staged --output-indicator-new=' ' --output-indicator-old=' '"
-alias ga="git add"
+# Ls aliases
+export EZA_COLORS="ur=32:uw=32:ux=32:ue=32:gr=33:gw=33:gx=33:tr=31:tw=31:tx=31:uu=38;5;253:gu=38;5;253:sn=38;5;253:sb=38;5;250:sk=38;5;45:sm=38;5;214:sg=38;5;202"
+eza_prefix="eza --color=always --color-scale=age --color-scale-mode=gradient --classify=auto"
+alias ll="$eza_prefix -gl"
+alias la="$eza_prefix -gla"
+alias ls="$eza_prefix -g"
+alias l="$eza_prefix -g"
 
 # Custom aliases
 alias cl="clear"
-alias l='ls -laF --color'
-alias lh='ls -lahF --color'
-alias ls='ls -F --color'
 alias s='sudo'
 # Cd directly into fzf result
 alias cdf='cd $(fdfind --hidden -E .git -E .cargo --type d | fzf)'
@@ -113,7 +112,12 @@ alias docker-slim="docker run -it --rm -v /var/run/docker.sock:/var/run/docker.s
 alias myip='curl https://icanhazip.com'
 alias strip-metadata='exiftool -r -All='
 
-# Git short-cuts.
+# Git aliases
+alias gs="git status --short"
+alias gd="git diff --output-indicator-new=' ' --output-indicator-old=' '"
+alias gds="git diff --staged --output-indicator-new=' ' --output-indicator-old=' '"
+alias ga="git add"
+
 function gc() {
   args=$@
   git commit -m "$args"
