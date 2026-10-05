@@ -43,7 +43,6 @@ export PATH=$PATH:/usr/local/cuda/bin
 
 # rust
 export PATH=$PATH:$HOME/.cargo/bin
-alias cargo-install='RUSTFLAGS="-C target-cpu=native" cargo install'
 
 # Increase cursor speed
 xset r rate 300 30
