@@ -9,16 +9,13 @@ ZSH_THEME="custom"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # You can also set it to another string to have that shown instead of the default red dots.
@@ -35,13 +32,18 @@ plugins=(git gh git-auto-fetch docker docker-compose nmap)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+export PATH=$PATH:$HOME/.local/bin
 
-export FZF_DEFAULT_COMMAND="fdfind --type f"
-export JAVA_HOME=/usr/lib/jvm/jdk-25
-export PATH=$JAVA_HOME/bin:$PATH
+export FZF_DEFAULT_COMMAND="fdfind --hidden -E .git -E .vscode -E .cargo"
+export JAVA_HOME=/usr/lib/jvm/java-25-openjdk-amd64
+export PATH=$PATH:$JAVA_HOME/bin
 
 # cuda
 export PATH=$PATH:/usr/local/cuda/bin
+
+# rust
+export PATH=$PATH:$HOME/.cargo/bin
+alias cargo-install='RUSTFLAGS="-C target-cpu=native" cargo install'
 
 # Increase cursor speed
 xset r rate 300 30
@@ -60,9 +62,9 @@ setopt auto_cd
 # Hitting tab now instead gives the first match instead of choosing with another tab. Hitting more tab cycles thorugh the list.
 setopt menu_complete
 
-# Fewer distractions.
-# Beep disables error bell sound.
-# nomatch turns off error from matching (e.g. ls *.txt) to instead use the literal string.
+# Fewer distractions. 
+# Beep disables error bell sound. 
+# nomatch turns off error from matching (e.g. ls *.txt) to instead use the literal string. 
 # notify prevents from interrupting mid command and waits until next prompt to notify.
 unsetopt beep nomatch notify
 
@@ -96,18 +98,15 @@ alias gd="git diff --output-indicator-new=' ' --output-indicator-old=' '"
 alias gds="git diff --staged --output-indicator-new=' ' --output-indicator-old=' '"
 alias ga="git add"
 
-# Ls aliases
-export EZA_COLORS="ur=32:uw=32:ux=32:ue=32:gr=33:gw=33:gx=33:tr=31:tw=31:tx=31:uu=38;5;253:gu=38;5;253:sn=38;5;253:sb=38;5;250:sk=38;5;45:sm=38;5;214:sg=38;5;202"
-alias ll='eza --color=always --color-scale=age --color-scale-mode=gradient -glF'
-alias la='eza --color=always --color-scale=age --color-scale-mode=gradient -glaF'
-alias ls='eza --color=always --color-scale=age --color-scale-mode=gradient -gF'
-alias l='eza --color=always --color-scale=age --color-scale-mode=gradient -gF'
-
 # Custom aliases
 alias cl="clear"
+alias l='ls -laF --color'
+alias lh='ls -lahF --color'
+alias ls='ls -F --color'
 alias s='sudo'
-
-#Add extra protection against mistakes
+# Cd directly into fzf result
+alias cdf='cd $(fdfind --hidden -E .git -E .cargo --type d | fzf)'
+# Add extra protection against mistakes
 alias rm='rm -I'
 alias untarz='tar -xvf'
 alias tarz='tar -cavf'
@@ -138,6 +137,7 @@ alias gcl="git clone"
 
 
 # Update functions
+
 update-discord() {
     local f
     f=$(mktemp --suffix=.deb) || { echo "Failed to create temporary file."; return 1; }
